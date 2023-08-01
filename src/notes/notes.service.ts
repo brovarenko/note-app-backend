@@ -2,7 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Note, NoteDocument } from './note.schema';
-import { CreateNoteDto, UpdateNoteDto } from './dto/note.dto';
+import { CreateNoteDto } from './dto/note.dto';
 
 @Injectable()
 export class NotesService {
@@ -28,7 +28,7 @@ export class NotesService {
     return createdNote.save();
   }
 
-  async update(id: string, updateNoteDto: UpdateNoteDto): Promise<Note> {
+  async update(id: string, updateNoteDto: CreateNoteDto): Promise<Note> {
     const note = await this.noteModel.findById(id).exec();
     if (!note) {
       throw new BadRequestException('Note not found');

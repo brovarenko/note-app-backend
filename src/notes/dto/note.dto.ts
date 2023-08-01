@@ -1,11 +1,15 @@
-export class CreateNoteDto {
-  name: string;
-  content: string;
-  category: string;
-}
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class UpdateNoteDto {
-  name?: string;
-  content?: string;
-  category?: string;
+export class CreateNoteDto {
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  content: string;
+
+  @IsNotEmpty()
+  @IsString()
+  category: string;
 }
