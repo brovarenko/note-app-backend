@@ -46,4 +46,32 @@ export class NotesService {
   async remove(id: string): Promise<Note> {
     return this.noteModel.findByIdAndRemove(id).exec();
   }
+
+  async getNotesStats(): Promise<
+    {
+      category: string;
+      activeCount: number;
+      archivedCount: number;
+    }[]
+  > {
+    const categoryCounts = await this.noteModel.aggregate([
+      {
+        $group: {
+          _id: '$category',
+          active: { $sum: { $cond: ['$archived', 0, 1] } },
+          archived: { $sum: { $cond: ['$archived', 1, 0] } },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          category: '$_id',
+          active: 1,
+          archived: 1,
+        },
+      },
+    ]);
+
+    return categoryCounts;
+  }
 }
