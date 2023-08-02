@@ -6,7 +6,9 @@ import { NotesModule } from './notes/notes.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.MONGODB_URI),
+    MongooseModule.forRoot(
+      'mongodb+srv://brovwg:12345@cluster0.f3yejut.mongodb.net/',
+    ),
     NotesModule,
   ],
 })

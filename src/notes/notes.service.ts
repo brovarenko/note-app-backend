@@ -19,11 +19,15 @@ export class NotesService {
   }
 
   async create(createNoteDto: CreateNoteDto): Promise<Note> {
+    const content = createNoteDto.content;
+    const dateRegex = /\b\d{1,2}[\.\/]\d{1,2}[\.\/]\d{4}\b/g;
+    const datesArray = content.match(dateRegex) || [];
+
     const createdNote = new this.noteModel({
       ...createNoteDto,
       createdAt: new Date().toISOString(),
       archived: false,
-      dates: [],
+      dates: datesArray,
     });
     return createdNote.save();
   }
@@ -35,10 +39,17 @@ export class NotesService {
     }
 
     for (const key in updateNoteDto) {
-      if (updateNoteDto.hasOwnProperty(key)) {
+      if (
+        key !== 'createdAt' &&
+        key !== 'dates' &&
+        updateNoteDto.hasOwnProperty(key)
+      ) {
         note[key] = updateNoteDto[key];
       }
     }
+    const dateRegex = /\b\d{1,2}[\.\/]\d{1,2}[\.\/]\d{4}\b/g;
+    const datesArray = updateNoteDto.content.match(dateRegex) || [];
+    note.dates = datesArray;
 
     return note.save();
   }
