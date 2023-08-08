@@ -15,10 +15,10 @@ import { CreateNoteDto } from './dto/note.dto';
 export class NotesController {
   constructor(private readonly notesService: NotesService) {}
 
-  // @Get('stats')
-  // async getNotesStats() {
-  //   return this.notesService.getNotesStats();
-  // }
+  @Get('stats')
+  async getNotesStats() {
+    return this.notesService.getNotesStats();
+  }
 
   @Get()
   findAll() {

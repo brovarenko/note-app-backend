@@ -1,5 +1,6 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import sequelize from 'sequelize';
 import { Note } from './note.model';
 import { CreateNoteDto } from './dto/note.dto';
 
@@ -56,31 +57,30 @@ export class NotesService {
     return note;
   }
 
-  // async getNotesStats(): Promise<
-  //   {
-  //     category: string;
-  //     activeCount: number;
-  //     archivedCount: number;
-  //   }[]
-  // > {
-  //   // const categoryCounts = await this.noteModel.aggregate([
-  //   //   {
-  //   //     $group: {
-  //   //       _id: '$category',
-  //   //       active: { $sum: { $cond: ['$archived', 0, 1] } },
-  //   //       archived: { $sum: { $cond: ['$archived', 1, 0] } },
-  //   //     },
-  //   //   },
-  //   //   {
-  //   //     $project: {
-  //   //       _id: 0,
-  //   //       category: '$_id',
-  //   //       active: 1,
-  //   //       archived: 1,
-  //   //     },
-  //   //   },
-  //   // ]);
+  async getNotesStats(): Promise<
+    {
+      category: string;
+      activeCount: number;
+      archivedCount: number;
+    }[]
+  > {
+    const categoryCounts: any = await this.noteModel.findAll({
+      attributes: [
+        'category',
+        [
+          sequelize.literal('SUM(CASE WHEN archived = true THEN 1 ELSE 0 END)'),
+          'archivedCount',
+        ],
+        [
+          sequelize.literal(
+            'SUM(CASE WHEN archived = false THEN 1 ELSE 0 END)',
+          ),
+          'activeCount',
+        ],
+      ],
+      group: ['category'],
+    });
 
-  //   return categoryCounts;
-  // }
+    return categoryCounts;
+  }
 }
