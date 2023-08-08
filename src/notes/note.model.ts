@@ -5,9 +5,6 @@ export class Note extends Model {
   @Column(DataType.STRING)
   name: string;
 
-  @Column(DataType.STRING)
-  createdAt: string;
-
   @Column(DataType.TEXT)
   content: string;
 

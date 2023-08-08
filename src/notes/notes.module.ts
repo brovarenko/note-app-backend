@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { NotesController } from './notes.controller';
 import { NotesService } from './notes.service';
-import { Note, NoteSchema } from './note.schema';
+import { Note } from './note.model';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Note.name, schema: NoteSchema }]),
-  ],
+  imports: [SequelizeModule.forFeature([Note])],
   controllers: [NotesController],
   providers: [NotesService],
 })
