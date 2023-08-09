@@ -26,7 +26,7 @@ export class NotesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.notesService.findOne(id);
   }
 
@@ -37,14 +37,14 @@ export class NotesController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body(new ValidationPipe()) updateNoteDto: CreateNoteDto,
   ) {
     return this.notesService.update(id, updateNoteDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.notesService.remove(id);
   }
 }
